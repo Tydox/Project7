@@ -1,15 +1,10 @@
 #include <iostream>
 #include <vector>
+#include "GameEngine.h"
 
-void main()
+int main()
 {
-	std::vector<int> intArr	={1,2,3,4,5,6,7,8,9,10};
-	for(int val : intArr)
-		std::cout << val << ","; 
-
-	intArr
-
-
-
-	
+	//GameBoard t;
+	GameEngine newGame;
+	return 1;
 }

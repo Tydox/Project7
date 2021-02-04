@@ -97,7 +97,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);DEBUG</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
@@ -138,7 +138,31 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Asset.cpp" />
+    <ClCompile Include="Card.cpp" />
+    <ClCompile Include="Deck.cpp" />
+    <ClCompile Include="GameBoard.cpp" />
+    <ClCompile Include="GameEngine.cpp" />
+    <ClCompile Include="GetTicket.cpp" />
+    <ClCompile Include="Instruction.cpp" />
+    <ClCompile Include="Jail.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Slot.cpp" />
+    <ClCompile Include="Start.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Asset.h" />
+    <ClInclude Include="Card.h" />
+    <ClInclude Include="Deck.h" />
+    <ClInclude Include="GameBoard.h" />
+    <ClInclude Include="GameEngine.h" />
+    <ClInclude Include="GetTicket.h" />
+    <ClInclude Include="Instruction.h" />
+    <ClInclude Include="Jail.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="Slot.h" />
+    <ClInclude Include="Start.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
