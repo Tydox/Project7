@@ -18,13 +18,20 @@ private:
 	GameBoard board;
 	vector<Player*> players;
 	Deck deck;
+	int playerIndex;
+	int boardSize;
+	int newRoundMoney;
 protected:
 	
 public:
 	//constructor
 	GameEngine();
 	void play();
-	bool turn(int playerIndex);
+	bool preTurn();
+	void turn();
 	void initPlayers();
+
+	int rollDice(); //return a value 1-6
+	void printPlayerPos();//print player position on board
 };
 

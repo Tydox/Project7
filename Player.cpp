@@ -14,3 +14,12 @@ void Player::clearAssets()
 
 	}
 }
+
+bool Player::setPosition(int pos, int bsize)
+{
+	int newPos = boardIndex + pos;
+		boardIndex = ((boardIndex + pos) % (bsize));
+		if (newPos / (bsize) > 0)
+			return true;
+		return false;
+}

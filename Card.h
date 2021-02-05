@@ -17,7 +17,7 @@ public:
 		std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
 		std::uniform_int_distribution<int> dis(-350, 350);
 		value = dis(gen);
-	#ifdef DEBUG
+	#ifdef DEBUG1
 		std::cout << "Cards Value: " << value << std::endl;
 	#endif
 	}

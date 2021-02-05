@@ -51,11 +51,23 @@ GameBoard::GameBoard():boardSize(0) {
 				slot.emplace_back(new GetTicket(2, slotName, slotIndex++));
 			if (instType == "S")
 				slot.emplace_back(new Start(0, slotName, slotIndex++));
-			
 		}
 	}
-#ifdef DEBUG
+#ifdef DEBUG1
 	for (int i = 0; i < slot.size(); i++)
 		cout << slot[i]->getIndex()<< ": " << slot[i]->getName() <<endl;
 #endif
+}
+
+void GameBoard::printSlot(int pos)
+{
+	cout << slot[pos]->getIndex() << ":" << slot[pos]->getName(); //print slot index + name
+	Asset* tmpAsset = dynamic_cast<Asset*>(slot[pos]);
+	if(tmpAsset)
+		tmpAsset->print();
+	
+	Instruction* tmpInst = dynamic_cast<Instruction*>(slot[pos]);
+	if (tmpInst)
+		tmpInst->print();
+	cout << endl;
 }

@@ -19,7 +19,7 @@ public:
 	{
 		for (int i = 0; i < DECK_SIZE;++i)
 		{
-#ifdef DEBUG
+#ifdef DEBUG1
 			std::cout << deckOfCards.size()<< ": ";
 #endif
 			deckOfCards.push(new Card());

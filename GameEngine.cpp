@@ -3,15 +3,16 @@
 #include <string>
 
 
-GameEngine::GameEngine()
+GameEngine::GameEngine():playerIndex(0)
 {
+	boardSize = board.getSize()-1;
 	initPlayers();
 	play();
 }
 
 void GameEngine::play()
 {
-	int playerIndex = 0;
+	//int playerIndex = 0;
 	while (1)
 	{
 		if (playerIndex == players.size())
@@ -27,8 +28,10 @@ void GameEngine::play()
 			cout << players[i]->getName();
 		#endif
 
-		if(turn(playerIndex)==false)
+		if(!(preTurn()))
 			continue;
+		turn();
+		
 		
 		++playerIndex;
 	}
@@ -90,12 +93,26 @@ void GameEngine::initPlayers()
 	}
 }
 
+int GameEngine::rollDice()
+{
+	std::random_device rd;  //Will be used to obtain a seed for the random number engine
+	std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+	std::uniform_int_distribution<int> dis(1, 6);
+	return dis(gen);
+}
+
+void GameEngine::printPlayerPos()
+{
+	cout << players[playerIndex]->getName() << "'s current Position: " << players[playerIndex]->getPosition() << endl;
+}
 
 
 
-bool GameEngine::turn(int playerIndex)
+
+bool GameEngine::preTurn()
 {	string tF; //Turn Flag if to play or quit
-	while(true)
+
+	while(true)//GET USER INPUT
 	try {
 		cout << "Player:" << players[playerIndex]->getName() << "Do you want to Play[P]/Forfeit[F]: ";
 			
@@ -112,24 +129,61 @@ bool GameEngine::turn(int playerIndex)
 		cout << error.what() << endl; //give warning and let the user input again
 	}
 
-	if (tF == "f" || tF == "F") //player chose to forfeit
+	
+	if (tF == "f" || tF == "F") //PLAYER CHOSE TO FORFEIT
 	{
-#ifdef DEBUG
+		#ifdef DEBUG
 		cout << "Players Vector size Before: " << players.size()<<endl;
-#endif
+		#endif
 		
 		players[playerIndex]->clearAssets(); //free his assets from ownership
 		players.erase(players.begin() + playerIndex);
 		
-#ifdef DEBUG
+		#ifdef DEBUG
 		cout << "Players Vector size After: " << players.size() << endl;
-#endif
+		#endif
 		return false;
 	}
-	if (tF == "p" || tF == "P")
+
+	
+	if (tF == "p" || tF == "P")//PLAYER CHOSE TO PLAY
 	{
 		return true;
 	}
+}
+
+void GameEngine::turn()
+{
+	if(players[playerIndex]->isJailed())
+	{
+		cout << "Player is jailed, skipping turn!" << endl;
+		players[playerIndex]->setJail(false);
+		return;
+	}
+
+	printPlayerPos(); //print old pos
+	int dice = rollDice();
 	
-	return false;
+	if(players[playerIndex]->setPosition(dice,boardSize)) //set new pos ||true = finished loop, give money
+	{
+		
+		//TODO ADD MONEY TO PLAYER BECAUSE HE DID A FULL LOOP 18->+1
+	}
+	printPlayerPos(); //print new pos
+	int newPos = players[playerIndex]->getPosition();//get players old pos
+
+	//Asset* tmpAsset = dynamic_cast<Asset*>(board.getSlot(newPos));
+
+
+	Instruction* tmpInst = dynamic_cast<Instruction*>(board.getSlot(newPos));
+	if (tmpInst)
+		if (tmpInst->getType()==1)
+			players[playerIndex]->setJail(true);
+
+	
+	
+	board.printSlot(newPos);
+	
+
+	
 }

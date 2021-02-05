@@ -16,12 +16,13 @@ class GameBoard
 private:
 	vector<Slot*> slot;
 	int boardSize;
-	
 protected:
 
 public:
 	GameBoard();
 	
-	
+	int getSize() { return boardSize; }
+	void printSlot(int pos);
+	Slot* getSlot(int pos) { return slot[pos]; }
 };
 
