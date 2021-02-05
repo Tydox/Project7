@@ -31,6 +31,29 @@ public:
 		}
 	}
 
+	bool isNotOwned() { if (playerLink)return false;  return true; }
+	int price() { return assetPrice; }
+	void setPLink(Player* plink) {
+		if (plink)
+			playerLink = plink;
+		else 
+			throw exception("Given Player Pointer is NULL! @Asset!");
+	}
+
+	bool isPawned()
+	{
+		if (assetYearsPawn >= 1)
+			return true;
+		
+		return false;
+	}
+
+	int getPidyon()
+	{
+		return assetYearsPawn * assetRent * assetIntrest;
+	}
+
+	int getRent() { return assetRent; }
 	
 };
 

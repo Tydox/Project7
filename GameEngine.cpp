@@ -35,7 +35,7 @@ void GameEngine::play()
 		
 		++playerIndex;
 	}
-	
+	cout << "Winner: " << players[0]->getName() << "!" << endl;
 }
 
 
@@ -160,9 +160,9 @@ void GameEngine::turn()
 		players[playerIndex]->setJail(false);
 		return;
 	}
-
-	printPlayerPos(); //print old pos
 	int dice = rollDice();
+	cout << "Dice Rolled: " << dice << endl;
+	printPlayerPos(); //print old pos
 	
 	if(players[playerIndex]->setPosition(dice,boardSize)) //set new pos ||true = finished loop, give money
 	{
@@ -172,17 +172,79 @@ void GameEngine::turn()
 	printPlayerPos(); //print new pos
 	int newPos = players[playerIndex]->getPosition();//get players old pos
 
-	//Asset* tmpAsset = dynamic_cast<Asset*>(board.getSlot(newPos));
-
-
+	board.printSlot(newPos);
+	
+	//CHECK WHAT KIND OF SLOT PLAYER IS ON
+	//INSTRUCTION SLOT
 	Instruction* tmpInst = dynamic_cast<Instruction*>(board.getSlot(newPos));
 	if (tmpInst)
-		if (tmpInst->getType()==1)
+		if (tmpInst->getType() == 1)
 			players[playerIndex]->setJail(true);
+
+	//ASSET SLOT
+	Asset* tmpAsset = dynamic_cast<Asset*>(board.getSlot(newPos));
+	if(tmpAsset)
+	if(tmpAsset->isNotOwned())
+	{
+		bool run = true;
+		string opt;
+		cout << "Purchase Asset? [Y/N]: ";
+		do
+		{
+			try
+			{
+				cin.ignore(cin.rdbuf()->in_avail());
+				getline(cin, opt);
+
+				//if (opt.empty() || opt!="Y" || opt!="N" )
+				if (opt.empty())
+					throw exception("Invalid Input! Try again!");
+
+				run = false;
+			}
+			catch (exception& error)
+			{
+				cout << error.what() << endl;
+			}
+		} while (run);
+
+		if (opt == "N"|| opt == "n")
+			return;
+
+		if(opt=="Y"|| opt == "y")
+		{
+			int ap = tmpAsset->price();//ap = asset price
+			int pc = players[playerIndex]->getMoney(); // pc = player cash $
+			if(pc>ap)//check if player has enough cash to buy asset
+			{
+				tmpAsset->setPLink(players[playerIndex]);
+				players[playerIndex]->addAsset(tmpAsset);
+				cout << "Purchase was successful!" << endl;
+			}
+			else
+			{
+				cout << "You do not have enough money to purchase this asset!" << endl << "Ending Turn!" << endl;
+			}
+		}
+
+
+		
+	}
+	else
+	{
+		if(tmpAsset->isPawned())
+		{
+			tmpAsset->getRent()
+		}
+		else
+
+	}
+
+	
 
 	
 	
-	board.printSlot(newPos);
+	
 	
 
 	

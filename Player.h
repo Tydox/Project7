@@ -29,5 +29,11 @@ public:
 	void setJail(bool status) { jailed = status; }
 	int getPosition() { return boardIndex; }
 	bool setPosition(int pos, int bsize);
+	void addAsset(Asset* ass)
+	{
+		assetOwned.emplace_back(ass);
+	}
+
+	bool payment(int num); //
 };
 

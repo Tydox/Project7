@@ -23,3 +23,8 @@ bool Player::setPosition(int pos, int bsize)
 			return true;
 		return false;
 }
+
+bool Player::payment(int num)
+{
+	return false;
+}
