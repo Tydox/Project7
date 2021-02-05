@@ -4,6 +4,7 @@
 
 
 GameBoard::GameBoard():boardSize(0) {
+
 	ifstream slotFile("board.txt", ios::in);
 	if(!slotFile.is_open())
 		throw exception("Failed to open file!");

@@ -8,7 +8,7 @@
 #include <vector>
 
 #define START_MONEY 350
-//#define DEBUG
+
 
 using namespace std;
 
@@ -23,7 +23,8 @@ protected:
 public:
 	//constructor
 	GameEngine();
-	
+	void play();
+	bool turn(int playerIndex);
 	void initPlayers();
 };
 

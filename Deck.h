@@ -5,7 +5,7 @@
 #include <iostream>
 using namespace std;
 
-#define DECK_SIZE 3
+#define DECK_SIZE 5
 
 class Deck
 {
