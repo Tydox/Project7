@@ -24,8 +24,8 @@ void GameEngine::play()
 		if (players.size() <= 1)
 			break;
 		
-		#ifndef DEBUG
-			cout << players[i]->getName();
+		#ifdef DEBUG
+			cout << players[playerIndex]->getName();
 		#endif
 
 		if(!(preTurn()))
