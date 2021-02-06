@@ -59,7 +59,7 @@ GameBoard::GameBoard():boardSize(0) {
 #endif
 }
 
-void GameBoard::printSlot(int pos)
+void GameBoard::printSlot(int pos)const
 {
 #ifdef DEBUG
 	cout << "GAME BOARD PRINT!" << endl;

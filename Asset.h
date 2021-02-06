@@ -26,20 +26,20 @@ public:
 	void clearPlayerLink() { playerLink = nullptr; assetYearsPawn = 0; }
 
 	//Medthod for virtual abstract class
-	virtual void print();
+	virtual void print()const;
 	void redeemAsset() { assetYearsPawn = 0; }
-	bool isNotOwned() { if (playerLink)return false;  return true; }
+	bool isNotOwned()const { if (playerLink)return false;  return true; }
 	//int price() { return assetPrice; }
 
 	Player* getPLink() { return playerLink; }
 	void setPLink(Player* plink);
 	void setPawned() { assetYearsPawn = 1; }
-	bool isPawned();
+	bool isPawned()const;
 	
-	int getPidyon()	{return assetYearsPawn * assetRent * assetIntrest;}
+	int getPidyon()const {return assetYearsPawn * assetRent * assetIntrest;}
 
-	int getRent() { return assetRent; }
-	int getPrice() { return assetPrice; }
+	int getRent() const { return assetRent; }
+	int getPrice()const { return assetPrice; }
 	void addYear() { assetYearsPawn += 1; }
 };
 

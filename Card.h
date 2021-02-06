@@ -22,7 +22,7 @@ public:
 	#endif
 	}
 	
-	int getVal() { return value; }
+	int getVal()const { return value; }
 	
 };
 

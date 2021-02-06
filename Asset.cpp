@@ -1,7 +1,7 @@
 #include "Asset.h"
 const int Asset::assetIntrest = RIBIT;
 
-void Asset::print()
+void Asset::print()const
 {
 	cout << "Slot [" << index << "]:" << endl << "Asset name:" << name << endl;
 	cout << "Group Name: " << groupName << endl;
@@ -22,7 +22,7 @@ void Asset::setPLink(Player* plink)
 		throw exception("Given Player Pointer is NULL! @Asset!");
 }
 
-bool Asset::isPawned()
+bool Asset::isPawned()const
 {
 	if (assetYearsPawn >= 1)
 		return true;

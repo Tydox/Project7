@@ -21,8 +21,8 @@ protected:
 public:
 	GameBoard();
 	
-	int getSize() { return boardSize; }
-	void printSlot(int pos);
-	Slot* getSlot(int pos) { return slot[pos]; }
+	int getSize()const { return boardSize; }
+	void printSlot(int pos)const;
+	Slot* getSlot(int pos)const { return slot[pos]; }
 };
 

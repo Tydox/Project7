@@ -23,11 +23,11 @@ public:
 
 	Player(string& Name,int money=0):name(Name),bankAcc(money),boardIndex(0),jailed(false),finishedLoop(false){}
 	void clearAssets();
-	string getName() { return name; }
-	int getMoney() { return bankAcc; }
-	bool isJailed() { return jailed; }
+	string getName()const { return name; }
+	int getMoney()const { return bankAcc; }
+	bool isJailed()const { return jailed; }
 	void setJail(bool status) { jailed = status; }
-	int getPosition() { return boardIndex; }
+	int getPosition()const { return boardIndex; }
 	bool setPosition(int pos, int bsize);
 	void addAsset(Asset* ass,int assetPrice)
 	{

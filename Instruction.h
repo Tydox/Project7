@@ -20,7 +20,7 @@ public:
 	//		break; }	
 	//	}
 	//}
-	int getType(){return type;}
+	int getType()const {return type;}
 	
 };
 
