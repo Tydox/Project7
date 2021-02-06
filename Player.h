@@ -21,7 +21,7 @@ protected:
 
 public:
 
-	Player(string& Name,int money):name(Name),bankAcc(money),boardIndex(0),jailed(false),finishedLoop(false){}
+	Player(string& Name,int money=0):name(Name),bankAcc(money),boardIndex(0),jailed(false),finishedLoop(false){}
 	void clearAssets();
 	string getName() { return name; }
 	int getMoney() { return bankAcc; }
@@ -35,6 +35,7 @@ public:
 		assetOwned.emplace_back(ass);
 	}
 
-	bool payment(int money); //
+	bool payment(int money);
+	void increaseRibit();
 };
 

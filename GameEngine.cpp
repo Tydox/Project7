@@ -116,6 +116,7 @@ void GameEngine::playerForfeit()
 {
 
 #ifdef DEBUG
+	cout << players[playerIndex]->getName() << " Lost!" << endl;
 		cout << "Players Vector size Before: " << players.size() << endl;
 #endif
 
@@ -179,14 +180,18 @@ bool GameEngine::turn()
 
 	if (players[playerIndex]->setPosition(dice, boardSize)) //set new pos ||true = finished loop, give money
 	{
-
+#ifdef DEBUG
+		cout << "Finished loop!" << endl;
+#endif
+		players[playerIndex]->payment(GIVE_MONEY);
+		players[playerIndex]->increaseRibit();
 		//TODO ADD MONEY TO PLAYER BECAUSE HE DID A FULL LOOP 18->+1
 	}
 	printPlayerPos(); //print new pos
 	int newPos = players[playerIndex]->getPosition();//get players old pos
 
 	board.printSlot(newPos);
-
+	bool playerSurvived = true;
 	//CHECK WHAT KIND OF SLOT PLAYER IS ON
 	//INSTRUCTION SLOT
 	Instruction* tmpInst = dynamic_cast<Instruction*>(board.getSlot(newPos));
@@ -194,15 +199,18 @@ bool GameEngine::turn()
 	{
 		int instaType = tmpInst->getType();
 		switch (instaType) {
+		case 0://type 0 - start give 350
+			{}
+			
 		case 1: 
 		{//type 1 = jail
 				players[playerIndex]->setJail(true);
 				return true;
 		}
-		case 2://TODO - GET TICKET
+		case 2:
 			{
 			cout << "Player Bank Account Before: " << players[playerIndex]->getMoney() << endl;
-			players[playerIndex]->payment(deck.getCard());
+			playerSurvived = players[playerIndex]->payment(deck.getCard());
 			cout << "Player Bank Account After: " << players[playerIndex]->getMoney() << endl;
 			}
 
@@ -210,7 +218,7 @@ bool GameEngine::turn()
 			
 		}
 	}
-	bool playerSurvived = true;
+	
 	
 	//ASSET SLOT
 	Asset* tmpAsset = dynamic_cast<Asset*>(board.getSlot(newPos));
@@ -273,7 +281,7 @@ bool GameEngine::turn()
 				Player* tmpPlayer = tmpAsset->getPLink();
 				tmpPlayer->payment(rentPrice);
 			}
-			
+
 		}
 
 

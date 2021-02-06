@@ -1,5 +1,5 @@
 I,S,Start : get 350 Nis
-P,City1,property1,150,20
+P,City1,property1,150,600
 P,City1,property2,180,35
 P,City1,property3,140,15
 I,J,Jail

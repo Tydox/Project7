@@ -6,14 +6,14 @@ using namespace std;
 class Slot
 {
 private:
-	std::string name;
-	int index;
+	
 	
 protected:
 		//Medthod for virtual abstract class
-	virtual void print()=0;
+	std::string name;
+	int index;
 public:
-	
+	virtual void print()=0;
 	Slot(string& sN,int sI):name(sN),index(sI){}
 
 	//TODO - CHECK IF I NEED VIRTUAL DESTROCTOR

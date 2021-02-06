@@ -61,13 +61,10 @@ GameBoard::GameBoard():boardSize(0) {
 
 void GameBoard::printSlot(int pos)
 {
-	cout << slot[pos]->getIndex() << ":" << slot[pos]->getName(); //print slot index + name
-	Asset* tmpAsset = dynamic_cast<Asset*>(slot[pos]);
-	if(tmpAsset)
-		tmpAsset->print();
-	
-	Instruction* tmpInst = dynamic_cast<Instruction*>(slot[pos]);
-	if (tmpInst)
-		tmpInst->print();
+#ifdef DEBUG
+	cout << "GAME BOARD PRINT!" << endl;
+#endif
+	slot[pos]->print();
+
 	cout << endl;
 }

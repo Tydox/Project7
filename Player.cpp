@@ -5,7 +5,7 @@ void Player::clearAssets()
 	while(!(assetOwned.empty()))
 	{
 			#ifdef DEBUG
-			cout << "Assert Erased: " << assetOwned[0]->getName();
+		cout << "Assert Erased: " << assetOwned[0]->getName() << endl;
 			#endif
 
 		assetOwned[0]->clearPlayerLink();
@@ -56,13 +56,18 @@ bool Player::payment(int money)
 			{
 				if (assetOwned[i]->isPawned())
 					continue;
-
+#ifdef DEBUG
+				cout << "Removing Money by pawning assets" << endl << "Asset Price Pawned: " << assetOwned[i]->getPrice() << endl;
+#endif
 				assetOwned[i]->setPawned();//pawn asset
 				assetOwned[i]->print();//print asset data
 				bankAcc += assetOwned[i]->getPrice(); //get $ of asset to player bank acc
 				if (bankAcc>= 0)
 					return true;
 			}
+#ifdef DEBUG
+			cout << "Game Over!" << endl;
+#endif
 			return false;
 		}
 		
@@ -70,4 +75,13 @@ bool Player::payment(int money)
 	return true;
 
 	
+}
+
+void Player::increaseRibit()
+{
+	for (int i = 0; i < assetOwned.size(); ++i)
+	{
+		if (assetOwned[i]->isPawned())
+				assetOwned[i]->addYear();
+	}
 }
