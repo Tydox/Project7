@@ -207,11 +207,13 @@ bool GameEngine::turn()
 				players[playerIndex]->setJail(true);
 				return true;
 		}
-		case 2:
+		case 2://type 2 - get random card -350,350
 			{
 			cout << "Player Bank Account Before: " << players[playerIndex]->getMoney() << endl;
 			playerSurvived = players[playerIndex]->payment(deck.getCard());
 			cout << "Player Bank Account After: " << players[playerIndex]->getMoney() << endl;
+			if (!playerSurvived)
+				cout << players[playerIndex]->getName() << " couldn't pay the payment fee!" << endl;
 			}
 
 
@@ -275,7 +277,8 @@ bool GameEngine::turn()
 			int rentPrice = tmpAsset->getRent();
 
 			playerSurvived = players[playerIndex]->payment(((-1) * rentPrice));
-			
+			if (!playerSurvived)
+				cout << players[playerIndex]->getName() << " couldn't pay the rent!" << endl;
 			if (!(tmpAsset->isPawned()))//some player owns asset
 			{
 				Player* tmpPlayer = tmpAsset->getPLink();
