@@ -30,7 +30,8 @@ void GameEngine::play()
 
 		if(!(preTurn()))
 			continue;
-		turn();
+		if (!turn())
+			playerForfeit();
 		
 		
 		++playerIndex;
@@ -43,7 +44,8 @@ void GameEngine::play()
 void GameEngine::initPlayers()
 {
 	bool run=true;
-	int playsAmount;
+	int pAmount;
+	string playsAmount;
 	string tmpName;
 	do
 	{
@@ -51,10 +53,14 @@ void GameEngine::initPlayers()
 		{
 			cout << "Enter Players Amount: ";
 			cin >> playsAmount;
+			
+			if (!std::all_of(playsAmount.begin(), playsAmount.end(), ::isdigit))
+				throw exception("Invalid Input!");
 
-			if (playsAmount < 2)
-				throw exception("Needed at least 2 players to start game!");				
-
+			pAmount = stoi(playsAmount);
+			if(pAmount<2)
+				throw exception("Needed at least 2 players to start game!");
+			
 			run = false;
 		}
 		catch (exception& error)
@@ -63,7 +69,7 @@ void GameEngine::initPlayers()
 		}
 	} while (run);
 
-	for (int i = 0; i < playsAmount; i++)
+	for (int i = 0; i < pAmount; i++)
 	{
 		run = true; //continue while
 		tmpName.clear(); //clear name
@@ -106,6 +112,22 @@ void GameEngine::printPlayerPos()
 	cout << players[playerIndex]->getName() << "'s current Position: " << players[playerIndex]->getPosition() << endl;
 }
 
+void GameEngine::playerForfeit()
+{
+
+#ifdef DEBUG
+		cout << "Players Vector size Before: " << players.size() << endl;
+#endif
+
+		players[playerIndex]->clearAssets(); //free his assets from ownership
+		players.erase(players.begin() + playerIndex);
+
+#ifdef DEBUG
+		cout << "Players Vector size After: " << players.size() << endl;
+#endif
+
+}
+
 
 
 
@@ -128,20 +150,10 @@ bool GameEngine::preTurn()
 	{
 		cout << error.what() << endl; //give warning and let the user input again
 	}
-
 	
 	if (tF == "f" || tF == "F") //PLAYER CHOSE TO FORFEIT
 	{
-		#ifdef DEBUG
-		cout << "Players Vector size Before: " << players.size()<<endl;
-		#endif
-		
-		players[playerIndex]->clearAssets(); //free his assets from ownership
-		players.erase(players.begin() + playerIndex);
-		
-		#ifdef DEBUG
-		cout << "Players Vector size After: " << players.size() << endl;
-		#endif
+		playerForfeit();
 		return false;
 	}
 
@@ -152,100 +164,119 @@ bool GameEngine::preTurn()
 	}
 }
 
-void GameEngine::turn()
+bool GameEngine::turn()
 {
-	if(players[playerIndex]->isJailed())
+	if (players[playerIndex]->isJailed())//check is player is jailed, is so skip turn
 	{
 		cout << "Player is jailed, skipping turn!" << endl;
 		players[playerIndex]->setJail(false);
-		return;
+		return true;
 	}
-	int dice = rollDice();
+	
+	int dice = rollDice();//generate dice num 1-6
 	cout << "Dice Rolled: " << dice << endl;
 	printPlayerPos(); //print old pos
-	
-	if(players[playerIndex]->setPosition(dice,boardSize)) //set new pos ||true = finished loop, give money
+
+	if (players[playerIndex]->setPosition(dice, boardSize)) //set new pos ||true = finished loop, give money
 	{
-		
+
 		//TODO ADD MONEY TO PLAYER BECAUSE HE DID A FULL LOOP 18->+1
 	}
 	printPlayerPos(); //print new pos
 	int newPos = players[playerIndex]->getPosition();//get players old pos
 
 	board.printSlot(newPos);
-	
+
 	//CHECK WHAT KIND OF SLOT PLAYER IS ON
 	//INSTRUCTION SLOT
 	Instruction* tmpInst = dynamic_cast<Instruction*>(board.getSlot(newPos));
 	if (tmpInst)
-		if (tmpInst->getType() == 1)
-			players[playerIndex]->setJail(true);
+	{
+		int instaType = tmpInst->getType();
+		switch (instaType) {
+		case 1: 
+		{//type 1 = jail
+				players[playerIndex]->setJail(true);
+				return true;
+		}
+		case 2://TODO - GET TICKET
+			{
+			cout << "Player Bank Account Before: " << players[playerIndex]->getMoney() << endl;
+			players[playerIndex]->payment(deck.getCard());
+			cout << "Player Bank Account After: " << players[playerIndex]->getMoney() << endl;
+			}
 
+
+			
+		}
+	}
+	bool playerSurvived = true;
+	
 	//ASSET SLOT
 	Asset* tmpAsset = dynamic_cast<Asset*>(board.getSlot(newPos));
-	if(tmpAsset)
-	if(tmpAsset->isNotOwned())
-	{
-		bool run = true;
-		string opt;
-		cout << "Purchase Asset? [Y/N]: ";
-		do
+	if (tmpAsset)
+		if (tmpAsset->isNotOwned())//check if there is an owner to the asset
 		{
-			try
+			bool run = true;
+			string opt;
+			
+			do
 			{
-				cin.ignore(cin.rdbuf()->in_avail());
-				getline(cin, opt);
+				try
+				{
+					cout << "Purchase Asset? [Y/N]: ";
+					cin.ignore(cin.rdbuf()->in_avail());
+					getline(cin, opt);
 
-				//if (opt.empty() || opt!="Y" || opt!="N" )
-				if (opt.empty())
-					throw exception("Invalid Input! Try again!");
+					
+					if (opt.empty() || !(opt == "Y" || opt == "y" || opt == "N" || opt == "n"))
+						throw exception("Invalid Input! Try again!");
 
-				run = false;
-			}
-			catch (exception& error)
+					run = false;
+				}
+				catch (exception& error)
+				{
+					cout << error.what() << endl;
+				}
+			} while (run);
+
+			if (opt == "N" || opt == "n")
+				return true;
+
+			if (opt == "Y" || opt == "y")
 			{
-				cout << error.what() << endl;
+				int ap = tmpAsset->getPrice();//ap = asset price
+				int pc = players[playerIndex]->getMoney(); // pc = player bank cash $
+				if (pc >= ap)//check if player has enough cash to buy asset
+				{
+					tmpAsset->setPLink(players[playerIndex]);//connect Player and Asset to point at each other
+					players[playerIndex]->addAsset(tmpAsset,ap);//and remove money from bank acc
+					cout << "Purchase was successful!" << endl;
+				}
+				else
+				{
+					cout << "You do not have enough money to purchase this asset!" << endl << "Ending Turn!" << endl;
+				}
 			}
-		} while (run);
 
-		if (opt == "N"|| opt == "n")
-			return;
 
-		if(opt=="Y"|| opt == "y")
+
+		}
+		else //asset has an owner || either bank or player
 		{
-			int ap = tmpAsset->price();//ap = asset price
-			int pc = players[playerIndex]->getMoney(); // pc = player cash $
-			if(pc>ap)//check if player has enough cash to buy asset
+			int rentPrice = tmpAsset->getRent();
+
+			playerSurvived = players[playerIndex]->payment(((-1) * rentPrice));
+			
+			if (!(tmpAsset->isPawned()))//some player owns asset
 			{
-				tmpAsset->setPLink(players[playerIndex]);
-				players[playerIndex]->addAsset(tmpAsset);
-				cout << "Purchase was successful!" << endl;
+				Player* tmpPlayer = tmpAsset->getPLink();
+				tmpPlayer->payment(rentPrice);
 			}
-			else
-			{
-				cout << "You do not have enough money to purchase this asset!" << endl << "Ending Turn!" << endl;
-			}
+			
 		}
 
 
-		
-	}
-	else
-	{
-		if(tmpAsset->isPawned())
-		{
-			tmpAsset->getRent()
-		}
-		else
-
-	}
-
-	
-
-	
-	
-	
-	
-
-	
+	return playerSurvived;
 }
+

@@ -29,11 +29,12 @@ public:
 	void setJail(bool status) { jailed = status; }
 	int getPosition() { return boardIndex; }
 	bool setPosition(int pos, int bsize);
-	void addAsset(Asset* ass)
+	void addAsset(Asset* ass,int assetPrice)
 	{
+		bankAcc -= assetPrice;
 		assetOwned.emplace_back(ass);
 	}
 
-	bool payment(int num); //
+	bool payment(int money); //
 };
 

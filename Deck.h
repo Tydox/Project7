@@ -24,19 +24,20 @@ public:
 #endif
 			deckOfCards.push(new Card());
 			
-			//TODO USE THIS CODE IN ORDER TO PUSH POP THE CARDS
-			//std::cout << deckOfCards.size()-1 << ": ";
-			//std::cout << "Cards Value: " << deckOfCards.front()->getVal() << std::endl;
-			//Card* c = deckOfCards.front();
-			//deckOfCards.pop();
-			//deckOfCards.push(c);
-			//std::cout << deckOfCards.size() - 1 << ": ";
-			//std::cout << "Cards Value: " << deckOfCards.front()->getVal() << std::endl;
+			
 
 		}
 	}
 	
-
+	int getCard()
+	{
+		//TODO USE THIS CODE IN ORDER TO PUSH POP THE CARDS
+			std::cout << "Payment: " << deckOfCards.front()->getVal() << std::endl;
+			Card* c = deckOfCards.front();
+			deckOfCards.pop();
+			deckOfCards.push(c);
+			return c->getVal();
+	}
 	
 };
 
