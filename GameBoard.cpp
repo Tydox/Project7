@@ -71,7 +71,10 @@ void GameBoard::printSlot(int pos)const
 
 GameBoard::~GameBoard()
 {
+#ifdef DEBUG
 	cout << "GAME BOARD DESTURCTOR: " << endl;
+#endif
+	
 		while (!(slot.empty()))
 		{
 #ifdef DEBUG

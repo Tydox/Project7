@@ -41,7 +41,8 @@ public:
 	int getRent() const { return assetRent; }
 	int getPrice()const { return assetPrice; }
 	void addYear() { assetYearsPawn += 1; }
-
+	Asset(const Asset& asset) :Slot() { *this = asset; }
+	const Asset& operator=(const Asset& asset){ throw exception("COPYING ASSET DATA IS NOT ALLOWED!"); }
 #ifdef DEBUG
 	~Asset() { cout << "ASSET DESTURCTOR CALLED: " << name << endl; }
 #endif

@@ -24,5 +24,8 @@ public:
 	int getSize()const { return boardSize; }
 	void printSlot(int pos)const;
 	Slot* getSlot(int pos)const { return slot[pos]; }
+	GameBoard(const GameBoard& gb) { *this = gb; }
+	const GameBoard& operator=(const GameBoard&) { throw exception("COPYING GAMEBOARD DATA IS NOT ALLOWED!"); }
+
 };
 

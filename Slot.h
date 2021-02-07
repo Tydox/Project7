@@ -9,6 +9,7 @@ protected:
 	std::string name;
 	int index;
 public:
+	Slot() = default;
 	//Medthod for virtual abstract class
 	virtual void print()const =0;
 	Slot(string& sN,int sI):name(sN),index(sI){}

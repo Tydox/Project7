@@ -14,6 +14,9 @@ private:
 public:
 	Deck();
 	int getCard();	
-	~Deck();	
+	~Deck();
+	Deck(const Deck& deck) { *this = deck; }
+	const Deck& operator=(const Deck&) { throw exception("COPYING DECK DATA IS NOT ALLOWED!"); }
+
 };
 

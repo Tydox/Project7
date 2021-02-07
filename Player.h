@@ -29,12 +29,13 @@ public:
 	void setJail(bool status) { jailed = status; }
 	int getPosition()const { return boardIndex; }
 	bool setPosition(int pos, int bsize);
-	void addAsset(Asset* ass, int assetPrice);
+	void addAsset(Asset* asset, int assetPrice);
 	bool payment(int money);
 	void increaseRibit();
-	Player(const Player&) { throw exception("COPYING PLAYER DATA IS NOT ALLOWED!"); }
-		//#ifdef DEBUG
+	Player(const Player& player) { *this = player; }
+	const Player& operator=(const Player&) { throw exception("COPYING PLAYER DATA IS NOT ALLOWED!"); }
+
 	~Player();
-		//#endif
+
 };
 

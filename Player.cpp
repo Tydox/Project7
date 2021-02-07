@@ -22,10 +22,10 @@ bool Player::setPosition(int pos, int bsize)
 		return false;
 }
 
-void Player::addAsset(Asset* ass, int assetPrice)
+void Player::addAsset(Asset* asset, int assetPrice)
 {
 	bankAcc -= assetPrice;
-	assetOwned.emplace_back(ass);
+	assetOwned.emplace_back(asset);
 }
 
 bool Player::payment(int money)

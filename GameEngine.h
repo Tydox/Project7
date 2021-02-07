@@ -34,6 +34,9 @@ public:
 	int rollDice(); //return a value 1-6
 	void printPlayerPos();//print player position on board
 	void playerForfeit();
+	GameEngine(const GameEngine& ge) { *this = ge; }
+	const GameEngine& operator=(const GameEngine&) { throw exception("COPYING GAME ENGINE DATA IS NOT ALLOWED!"); }
+
 	
 };
 
