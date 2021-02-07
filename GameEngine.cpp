@@ -7,12 +7,10 @@ GameEngine::GameEngine():playerIndex(0)
 {
 	boardSize = board.getSize()-1;
 	initPlayers();
-	play();
 }
 
 void GameEngine::play()
 {
-	//int playerIndex = 0;
 	while (1)
 	{
 		if (playerIndex == players.size())
@@ -32,7 +30,7 @@ void GameEngine::play()
 			continue;
 		if (!turn())
 		{
-			playerForfeit();
+			playerForfeit();//player lost - remove from game
 			continue;
 		}
 		
@@ -41,7 +39,7 @@ void GameEngine::play()
 	}
 	cout << endl << "The Winner is: " << players[0]->getName() << "!!!!!!!!!!!!" << endl;
 	playerForfeit();
-	cout << endl << "Closing GAME!!!!" << endl;
+	cout << endl << "GAME Over!" << endl;
 }
 
 
@@ -203,16 +201,16 @@ bool GameEngine::turn()
 	}
 	
 	int dice = rollDice();//generate dice num 1-6
-	int oldPos = players[playerIndex]->getPosition();
+	int oldPos = players[playerIndex]->getPosition();//get old position for print val
 	
-	bool payedNewRound = false;
+	bool payedNewRound = false;//flag to know if to pay for completed the board loop slot
 	if (players[playerIndex]->setPosition(dice, boardSize)) //set new pos ||true = finished loop, give money
 	{
 #ifdef DEBUG
 		cout << "Finished loop!" << endl;
 #endif
-		players[playerIndex]->payment(GIVE_MONEY);
 		players[playerIndex]->increaseRibit();
+		players[playerIndex]->payment(START_MONEY);
 		payedNewRound = true;
 		//TODO ADD MONEY TO PLAYER BECAUSE HE DID A FULL LOOP 18->+1
 	}
@@ -221,16 +219,15 @@ bool GameEngine::turn()
 
 	
 	board.printSlot(newPos);
-	bool playerSurvived = true;
-	int oldBankAcc = players[playerIndex]->getMoney();
+	bool playerSurvived = true;//flag to know if player payed the payment successfully
+	int oldBankAcc = players[playerIndex]->getMoney();//save bank $ before payment change
+
 	//CHECK WHAT KIND OF SLOT PLAYER IS ON
 	//INSTRUCTION SLOT
 	Instruction* tmpInst = dynamic_cast<Instruction*>(board.getSlot(newPos));
 	if (tmpInst)
 	{
-		
 		int instaType = tmpInst->getType();
-		
 		switch (instaType)
 		{
 		case 0:{//type 0 - start give 350
@@ -241,12 +238,12 @@ bool GameEngine::turn()
 				break;
 			}
 			
-		case 1:{//type 1 = jail
+		case 1:{//type 1 - jail
 				players[playerIndex]->setJail(true);
 				return true;
 				
 		}
-		case 2:{//type 2 - get random card -350,350
+		case 2:{//type 2 - get ticket
 			int payment = deck.getCard();
 			playerSurvived = players[playerIndex]->payment(payment);
 			instaPrint(oldBankAcc, payment);
@@ -267,7 +264,6 @@ bool GameEngine::turn()
 		{
 			bool run = true;
 			string opt;
-			
 			do
 			{
 				try
@@ -312,12 +308,12 @@ bool GameEngine::turn()
 		else //asset has an owner || either bank or player
 		{
 			int rentPrice = tmpAsset->getRent();
-			playerSurvived = players[playerIndex]->payment(((-1) * rentPrice));
+			playerSurvived = players[playerIndex]->payment(((-1) * rentPrice));//player pays rent
 			instaPrint(oldBankAcc, (-1)* rentPrice);
 			
 			if (!playerSurvived)
 				cout << players[playerIndex]->getName() << " couldn't pay the rent!" << endl;
-			if (!(tmpAsset->isPawned()))//some player owns asset
+			if (!(tmpAsset->isPawned()))//if some player owns asset add +rent$ to their bank account
 			{
 				Player* tmpPlayer = tmpAsset->getPLink();
 				tmpPlayer->payment(rentPrice);

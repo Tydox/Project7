@@ -1,12 +1,10 @@
 #pragma once
-
 #include "Card.h"
 #include <queue>
 #include <iostream>
+#define DECK_SIZE 64
+
 using namespace std;
-
-#define DECK_SIZE 5
-
 class Deck
 {
 private:

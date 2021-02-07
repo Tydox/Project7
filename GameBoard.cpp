@@ -9,8 +9,6 @@ GameBoard::GameBoard():boardSize(0) {
 	if(!slotFile.is_open())
 		throw exception("Failed to open file!");
 
-	//slotData.seekg(3,ios::beg);
-	
 	string slotType, slotName;
 	//instruction data
 	string instType;
@@ -18,7 +16,6 @@ GameBoard::GameBoard():boardSize(0) {
 	string groupName, assetPrice, assetRent;
 	int slotIndex = 0;
 	
-
 	while (!slotFile.eof()) {
 		++boardSize;
 		slotType.clear();

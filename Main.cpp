@@ -6,6 +6,7 @@ int main()
 {
 	try {
 		GameEngine newGame;
+		newGame.play();
 	}
 	catch(exception& error)
 	{

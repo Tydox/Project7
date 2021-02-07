@@ -28,26 +28,29 @@ void Player::addAsset(Asset* asset, int assetPrice)
 	assetOwned.emplace_back(asset);
 }
 
+void Player::claimPawned()
+{
+	//check if there are any pawned assets to reclaim
+		for (int i = 0; i < assetOwned.size(); ++i) 
+		{
+			if (assetOwned[i]->isPawned()) 
+				if ((bankAcc - assetOwned[i]->getPidyon()) >= 0)
+					assetOwned[i]->redeemAsset();
+		}
+}
+
 bool Player::payment(int money)
 {
 	if (money >= 0){//give money to player
 		bankAcc += money;
 
-		//check if there are any pawned assets
-		for (int i = 0; i < assetOwned.size(); ++i) 
-		{
-			if (assetOwned[i]->isPawned()) 
-			{
-				if ((bankAcc - assetOwned[i]->getPidyon()) >= 0)
-					assetOwned[i]->redeemAsset();
-			}
-		}
-		
+		claimPawned();
 		return true;
 	}
 	
 	if (money <= 0) {//TODO CHECK HOW TO OPTIMZE THE CODE
 
+		
 		if (bankAcc + money >= 0)//take money from player if he has enough in bank
 		{
 			bankAcc += money;
@@ -55,38 +58,24 @@ bool Player::payment(int money)
 		}
 		
 		bankAcc += money;
-		if (bankAcc < 0) {
+		if (bankAcc < 0) {//if player does not have enough money->pawn assets until enough
 			for (int i = 0; i < assetOwned.size(); ++i)
 			{
-				if (assetOwned[i]->isPawned())
+				if (assetOwned[i]->isPawned())//skip if asset's already pawned
 					continue;
-#ifdef DEBUG
-				cout << "Removing Money by pawning assets" << endl << "Asset Price Pawned: " << assetOwned[i]->getPrice() << endl;
-#endif
+
 				assetOwned[i]->setPawned();//pawn asset
 				cout << left << setw(7) << setfill(' ') << "Pawned";
 				assetOwned[i]->print();//print asset data
-				//cout << left << setw(13) << setfill(' ') << "Old Balace:";
-				//cout << bankAcc << endl;
 				bankAcc += assetOwned[i]->getPrice(); //get $ of asset to player bank acc
-				//cout << left << setw(13) << setfill(' ') << "New Balace:";
-				//cout << bankAcc<<endl;
 				
 				if (bankAcc>= 0)
 					return true;
 			}
-#ifdef DEBUG
-			cout << "Game Over!" << endl;
-#endif
-			return false;
+			return false;//not enough money after pawning all assets
 		}
 		
 	}
-
-	
-	return true;
-
-	
 }
 
 void Player::increaseRibit()
@@ -100,7 +89,9 @@ void Player::increaseRibit()
 
 Player::~Player()
 {
+#ifdef DEBUG
 	cout << "PLAYER DESTURCTOR CALLED: " << name << endl;
+	#endif
 	while (!(assetOwned.empty()))
 	{
 #ifdef DEBUG
