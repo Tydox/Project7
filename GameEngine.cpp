@@ -39,9 +39,9 @@ void GameEngine::play()
 		
 		++playerIndex;
 	}
-	cout << "Winner: " << players[0]->getName() << "!" << endl;
+	cout << endl << "The Winner is: " << players[0]->getName() << "!!!!!!!!!!!!" << endl;
 	playerForfeit();
-	cout << "ENDING GAME!!!!"<<endl;
+	cout << endl << "Closing GAME!!!!" << endl;
 }
 
 
@@ -112,9 +112,15 @@ int GameEngine::rollDice()
 	return dis(gen);
 }
 
-void GameEngine::printPlayerPos()
+void GameEngine::printPlayerPos(int& oldpose, int& dice, int& newpose)const
 {
-	cout << players[playerIndex]->getName() << "'s current Position: " << players[playerIndex]->getPosition() << endl;
+	cout << left << setw(13) << setfill(' ') << "Dice Rolled";//DICE
+	cout << left << setw(18) << setfill(' ') << "Current Position";//old position
+	cout << left << setw(18) << setfill(' ') << "New Position";	//newposition
+	cout << left << setw(5) << setfill(' ') << "Type" << endl;
+	cout << left << setw(13) << setfill(' ') << dice;	//data print
+	cout << left << setw(18) << setfill(' ') << oldpose;
+	cout << left << setw(18) << setfill(' ') << newpose;
 }
 
 void GameEngine::playerForfeit()
@@ -135,6 +141,18 @@ void GameEngine::playerForfeit()
 
 }
 
+void GameEngine::instaPrint(int& oba, int pay)
+{
+	cout << left << setw(75) << setfill('-') << "" << endl;
+	cout << left << setw(14) << setfill(' ') << "Payment";
+	cout << left << setw(25) << setfill(' ') << "Bank Account Before";
+	cout << left << setw(20) << setfill(' ') << "Bank Account After" << endl;
+	cout << left << setw(14) << setfill(' ') << pay;
+	cout << left << setw(25) << setfill(' ') << oba;
+	cout << left << setw(20) << setfill(' ') << players[playerIndex]->getMoney() << endl;
+	cout << left << setw(75) << setfill('-') << "" << endl << endl;
+}
+
 
 
 
@@ -143,7 +161,11 @@ bool GameEngine::preTurn()
 
 	while(true)//GET USER INPUT
 	try {
-		cout << "Player:" << players[playerIndex]->getName() << "Do you want to Play[P]/Forfeit[F]: ";
+		cout << left << setw(50) << setfill('_') << "" << endl;
+		cout << left << setw(16) << setfill(' ') << "Current Player:";
+		cout << left << setw(4)  << setfill(' ') << players[playerIndex]->getName() << endl;
+		cout << left << setw(36) << setfill(' ') << "Do you want to Play[P]/Forfeit[F]:";
+
 			
 		cin.ignore(cin.rdbuf()->in_avail());
 		getline(cin, tF);//get from user input if to play or quit
@@ -181,9 +203,9 @@ bool GameEngine::turn()
 	}
 	
 	int dice = rollDice();//generate dice num 1-6
-	cout << "Dice Rolled: " << dice << endl;
-	printPlayerPos(); //print old pos
-
+	int oldPos = players[playerIndex]->getPosition();
+	
+	bool payedNewRound = false;
 	if (players[playerIndex]->setPosition(dice, boardSize)) //set new pos ||true = finished loop, give money
 	{
 #ifdef DEBUG
@@ -191,39 +213,49 @@ bool GameEngine::turn()
 #endif
 		players[playerIndex]->payment(GIVE_MONEY);
 		players[playerIndex]->increaseRibit();
+		payedNewRound = true;
 		//TODO ADD MONEY TO PLAYER BECAUSE HE DID A FULL LOOP 18->+1
 	}
-	printPlayerPos(); //print new pos
 	int newPos = players[playerIndex]->getPosition();//get players old pos
+	printPlayerPos(oldPos,dice,newPos); //print old pos
 
+	
 	board.printSlot(newPos);
 	bool playerSurvived = true;
+	int oldBankAcc = players[playerIndex]->getMoney();
 	//CHECK WHAT KIND OF SLOT PLAYER IS ON
 	//INSTRUCTION SLOT
 	Instruction* tmpInst = dynamic_cast<Instruction*>(board.getSlot(newPos));
 	if (tmpInst)
 	{
+		
 		int instaType = tmpInst->getType();
-		switch (instaType) {
-		case 0://type 0 - start give 350
-			{}
+		
+		switch (instaType)
+		{
+		case 0:{//type 0 - start give 350
+				if(!payedNewRound)
+					players[playerIndex]->payment(START_MONEY);
+
+				instaPrint(oldBankAcc, START_MONEY);
+				break;
+			}
 			
-		case 1: 
-		{//type 1 = jail
+		case 1:{//type 1 = jail
 				players[playerIndex]->setJail(true);
 				return true;
+				
 		}
-		case 2://type 2 - get random card -350,350
-			{
-			cout << "Player Bank Account Before: " << players[playerIndex]->getMoney() << endl;
-			playerSurvived = players[playerIndex]->payment(deck.getCard());
-			cout << "Player Bank Account After: " << players[playerIndex]->getMoney() << endl;
+		case 2:{//type 2 - get random card -350,350
+			int payment = deck.getCard();
+			playerSurvived = players[playerIndex]->payment(payment);
+			instaPrint(oldBankAcc, payment);
+						
 			if (!playerSurvived)
 				cout << players[playerIndex]->getName() << " couldn't pay the payment fee!" << endl;
-			}
 
-
-			
+			break;
+		}	
 		}
 	}
 	
@@ -243,7 +275,6 @@ bool GameEngine::turn()
 					cout << "Purchase Asset? [Y/N]: ";
 					cin.ignore(cin.rdbuf()->in_avail());
 					getline(cin, opt);
-
 					
 					if (opt.empty() || !(opt == "Y" || opt == "y" || opt == "N" || opt == "n"))
 						throw exception("Invalid Input! Try again!");
@@ -281,8 +312,9 @@ bool GameEngine::turn()
 		else //asset has an owner || either bank or player
 		{
 			int rentPrice = tmpAsset->getRent();
-
 			playerSurvived = players[playerIndex]->payment(((-1) * rentPrice));
+			instaPrint(oldBankAcc, (-1)* rentPrice);
+			
 			if (!playerSurvived)
 				cout << players[playerIndex]->getName() << " couldn't pay the rent!" << endl;
 			if (!(tmpAsset->isPawned()))//some player owns asset

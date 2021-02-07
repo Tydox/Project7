@@ -32,8 +32,9 @@ public:
 	void initPlayers();
 
 	int rollDice(); //return a value 1-6
-	void printPlayerPos();//print player position on board
+	void printPlayerPos(int& oldpose, int& dice,int& newpose)const;//print player position on board
 	void playerForfeit();
+	void instaPrint(int& oba, int pay);
 	GameEngine(const GameEngine& ge) { *this = ge; }
 	const GameEngine& operator=(const GameEngine&) { throw exception("COPYING GAME ENGINE DATA IS NOT ALLOWED!"); }
 

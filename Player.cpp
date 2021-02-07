@@ -38,7 +38,7 @@ bool Player::payment(int money)
 		{
 			if (assetOwned[i]->isPawned()) 
 			{
-				if (bankAcc - assetOwned[i]->getPidyon() >= 0) 
+				if ((bankAcc - assetOwned[i]->getPidyon()) >= 0)
 					assetOwned[i]->redeemAsset();
 			}
 		}
@@ -64,8 +64,14 @@ bool Player::payment(int money)
 				cout << "Removing Money by pawning assets" << endl << "Asset Price Pawned: " << assetOwned[i]->getPrice() << endl;
 #endif
 				assetOwned[i]->setPawned();//pawn asset
+				cout << left << setw(7) << setfill(' ') << "Pawned";
 				assetOwned[i]->print();//print asset data
+				//cout << left << setw(13) << setfill(' ') << "Old Balace:";
+				//cout << bankAcc << endl;
 				bankAcc += assetOwned[i]->getPrice(); //get $ of asset to player bank acc
+				//cout << left << setw(13) << setfill(' ') << "New Balace:";
+				//cout << bankAcc<<endl;
+				
 				if (bankAcc>= 0)
 					return true;
 			}
