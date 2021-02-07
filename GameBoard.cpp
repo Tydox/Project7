@@ -68,3 +68,18 @@ void GameBoard::printSlot(int pos)const
 
 	cout << endl;
 }
+
+GameBoard::~GameBoard()
+{
+	cout << "GAME BOARD DESTURCTOR: " << endl;
+		while (!(slot.empty()))
+		{
+#ifdef DEBUG
+			cout << "Slot Erased: " << slot[0]->getName() << endl;
+#endif
+
+			delete slot[0];
+			slot[0] = nullptr;
+			slot.erase(slot.begin());
+		}
+}

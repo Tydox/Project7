@@ -20,7 +20,7 @@ protected:
 
 public:
 	GameBoard();
-	
+	~GameBoard();
 	int getSize()const { return boardSize; }
 	void printSlot(int pos)const;
 	Slot* getSlot(int pos)const { return slot[pos]; }

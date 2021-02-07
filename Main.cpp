@@ -4,8 +4,12 @@
 
 int main()
 {
-
-	GameEngine newGame;
-	
+	try {
+		GameEngine newGame;
+	}
+	catch(exception& error)
+	{
+		cout << error.what();
+	}
 	return 1;
 }

@@ -5,15 +5,13 @@ void Player::clearAssets()
 	while(!(assetOwned.empty()))
 	{
 			#ifdef DEBUG
-		cout << "Assert Erased: " << assetOwned[0]->getName() << endl;
+		cout << "Assert Ownership Cleared: " << assetOwned[0]->getName() << endl;
 			#endif
-
 		assetOwned[0]->clearPlayerLink();
 		assetOwned.erase(assetOwned.begin());
-		//assetOwned.shrink_to_fit();
-
 	}
 }
+
 
 bool Player::setPosition(int pos, int bsize)
 {
@@ -22,6 +20,12 @@ bool Player::setPosition(int pos, int bsize)
 		if (newPos / (bsize) > 0)
 			return true;
 		return false;
+}
+
+void Player::addAsset(Asset* ass, int assetPrice)
+{
+	bankAcc -= assetPrice;
+	assetOwned.emplace_back(ass);
 }
 
 bool Player::payment(int money)
@@ -72,6 +76,8 @@ bool Player::payment(int money)
 		}
 		
 	}
+
+	
 	return true;
 
 	
@@ -85,3 +91,17 @@ void Player::increaseRibit()
 				assetOwned[i]->addYear();
 	}
 }
+
+Player::~Player()
+{
+	cout << "PLAYER DESTURCTOR CALLED: " << name << endl;
+	while (!(assetOwned.empty()))
+	{
+#ifdef DEBUG
+		cout << "Assert Ownership Cleared: " << assetOwned[0]->getName() << endl;
+#endif
+		assetOwned[0]->clearPlayerLink();
+		assetOwned.erase(assetOwned.begin());
+	}
+}
+

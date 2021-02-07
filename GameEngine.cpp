@@ -31,12 +31,17 @@ void GameEngine::play()
 		if(!(preTurn()))
 			continue;
 		if (!turn())
+		{
 			playerForfeit();
+			continue;
+		}
 		
 		
 		++playerIndex;
 	}
 	cout << "Winner: " << players[0]->getName() << "!" << endl;
+	playerForfeit();
+	cout << "ENDING GAME!!!!"<<endl;
 }
 
 
@@ -119,8 +124,9 @@ void GameEngine::playerForfeit()
 	cout << players[playerIndex]->getName() << " Lost!" << endl;
 		cout << "Players Vector size Before: " << players.size() << endl;
 #endif
-
-		players[playerIndex]->clearAssets(); //free his assets from ownership
+	
+		delete players[playerIndex];
+		players[playerIndex] = nullptr;
 		players.erase(players.begin() + playerIndex);
 
 #ifdef DEBUG

@@ -41,5 +41,9 @@ public:
 	int getRent() const { return assetRent; }
 	int getPrice()const { return assetPrice; }
 	void addYear() { assetYearsPawn += 1; }
+
+#ifdef DEBUG
+	~Asset() { cout << "ASSET DESTURCTOR CALLED: " << name << endl; }
+#endif
 };
 

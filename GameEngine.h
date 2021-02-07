@@ -34,5 +34,6 @@ public:
 	int rollDice(); //return a value 1-6
 	void printPlayerPos();//print player position on board
 	void playerForfeit();
+	
 };
 
