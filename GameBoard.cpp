@@ -1,5 +1,4 @@
 #include "GameBoard.h"
-#include <string>
 
 GameBoard::GameBoard():boardSize(0) {
 	
