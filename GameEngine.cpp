@@ -1,5 +1,5 @@
 #include "GameEngine.h"
-#include <string>
+
 
 GameEngine::GameEngine():playerIndex(0)
 {
@@ -205,7 +205,6 @@ bool GameEngine::turn()
 		players[playerIndex]->increaseRibit();
 		players[playerIndex]->payment(START_MONEY);
 		payedNewRound = true;
-		//TODO ADD MONEY TO PLAYER BECAUSE HE DID A FULL LOOP 18->+1
 	}
 	int newPos = players[playerIndex]->getPosition();//get players old pos
 	printPlayerPos(oldPos,dice,newPos); //print old pos

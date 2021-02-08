@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Deck.h"
 #include <vector>
+#include <string>
 
 #define START_MONEY 350
 

@@ -48,9 +48,7 @@ bool Player::payment(int money)
 		return true;
 	}
 	
-	if (money <= 0) {//TODO CHECK HOW TO OPTIMZE THE CODE
-
-		
+	if (money <= 0) {		
 		if (bankAcc + money >= 0)//take money from player if he has enough in bank
 		{
 			bankAcc += money;
