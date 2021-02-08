@@ -3,21 +3,11 @@
 Deck::Deck()
 {
 		for (int i = 0; i < DECK_SIZE; ++i)
-		{
-#ifdef DEBUG1
-			std::cout << deckOfCards.size() << ": ";
-#endif
 			deckOfCards.push(new Card());
-		}
-	}
+}
 
 int Deck::getCard()
 {
-	//TODO USE THIS CODE IN ORDER TO PUSH POP THE CARDS
-	#ifdef DEBUG1
-	std::cout << "Payment: " << deckOfCards.front()->getVal() << std::endl;
-	#endif
-	
 	Card* c = deckOfCards.front();
 	deckOfCards.pop();
 	deckOfCards.push(c);
@@ -30,7 +20,6 @@ Deck::~Deck()
 	cout << "DECK DESTURCTOR CALLED: " << endl;
 #endif
 	
-
 	Card* tc = nullptr;//tc=tmp card
 	while (!(deckOfCards.empty()))
 	{

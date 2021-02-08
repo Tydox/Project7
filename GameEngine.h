@@ -7,8 +7,7 @@
 #define START_MONEY 350
 
 using namespace std;
-class GameEngine
-{
+class GameEngine{
 private:
 	GameBoard board;
 	vector<Player*> players;
@@ -18,19 +17,18 @@ private:
 	int newRoundMoney;
 public:
 	//constructor
-	GameEngine();
-	void play();
-	bool preTurn();
-	bool turn();
-	void initPlayers();
-
+	GameEngine();//copy constructor
+	void play();//start the game
+	bool preTurn();//asks players if they want to play or forfeit
+	bool turn();//actual game turn after a player says he wants to play
+	void initPlayers();//init players in game
 	int rollDice(); //return a value 1-6
 	void printPlayerPos(int& oldpose, int& dice,int& newpose)const;//print player position on board
-	void playerForfeit();
-	void instaPrint(int& oba, int pay);
+	void playerForfeit(); //player quits game, delete him and free his assets to the public
+	void bankPayPrint(int oba, int pay)const;//print player payment + bank before & after data
+
+	//block ctor, operator= 
 	GameEngine(const GameEngine& ge) { *this = ge; }
 	const GameEngine& operator=(const GameEngine&) { throw exception("COPYING GAME ENGINE DATA IS NOT ALLOWED!"); }
-
-	
 };
 

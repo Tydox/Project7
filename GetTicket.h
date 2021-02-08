@@ -1,16 +1,9 @@
 #pragma once
 #include "Instruction.h"
 
-class GetTicket:public Instruction
-{
+class GetTicket:public Instruction{
 protected:
-	//Medthod for virtual abstract class
-	virtual void print()const
-	{
-		//cout << "Slot [" << index << "]:" << endl << "Instruction Card:" << name << endl;
-		cout << "Instruction Card: " << name << endl;
-
-	}
+	virtual void print()const {	cout << "Instruction Card: " << name << endl;}//Medthod for virtual abstract class
 public:
 	GetTicket(int type, string& sN, int sI):Instruction(type, sN, sI){}
 };

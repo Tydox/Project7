@@ -80,7 +80,7 @@ bool Player::payment(int money)
 
 void Player::increaseRibit()
 {
-	for (int i = 0; i < assetOwned.size(); ++i)
+	for (int i = 0; i < assetOwned.size(); ++i)//go over each asset and if its pawned add a year so ribit increases
 	{
 		if (assetOwned[i]->isPawned())
 				assetOwned[i]->addYear();

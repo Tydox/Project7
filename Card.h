@@ -2,15 +2,11 @@
 #include <iostream>
 #include <random>
 
-class Card
-{
+class Card{
 private:
 	int value;
-protected:
-
 public:
 	Card();
 	int getVal()const { return value; }
-	
 };
 

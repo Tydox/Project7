@@ -1,14 +1,12 @@
 #include "GameBoard.h"
-
 #include <string>
 
-
 GameBoard::GameBoard():boardSize(0) {
-
-	ifstream slotFile("board.txt", ios::in);
-	if(!slotFile.is_open())
+	
+	ifstream slotFile("board.txt", ios::in);//open file in read mode
+	if(!slotFile.is_open())//check that opening file was successful
 		throw exception("Failed to open file!");
-
+	//slot data
 	string slotType, slotName;
 	//instruction data
 	string instType;
@@ -17,17 +15,17 @@ GameBoard::GameBoard():boardSize(0) {
 	int slotIndex = 0;
 	
 	while (!slotFile.eof()) {
-		++boardSize;
-		slotType.clear();
+		++boardSize;//increase board size when a new slot is added
+		slotType.clear();//clear all strings to make sure no junk is left behind as a precaution
 		slotName.clear();
 		instType.clear();
 		groupName.clear();
 		assetPrice.clear();
 		assetRent.clear();
 
-		getline(slotFile, slotType, ',');
+		getline(slotFile, slotType, ',');//read sentence until first ","
 		
-		if (slotType == "P")
+		if (slotType == "P")//Asset Slot
 		{
 			getline(slotFile, groupName, ',');
 			getline(slotFile, slotName, ',');
@@ -37,7 +35,7 @@ GameBoard::GameBoard():boardSize(0) {
 			slot.emplace_back(new Asset(slotName, groupName, stoi(assetPrice), stoi(assetRent), slotIndex++));
 			continue;
 		}
-		if (slotType == "I")
+		if (slotType == "I")//INTRUCTION SLOT
 		{
 			getline(slotFile, instType, ',');
 			getline(slotFile, slotName, '\n');
@@ -58,11 +56,7 @@ GameBoard::GameBoard():boardSize(0) {
 
 void GameBoard::printSlot(int pos)const
 {
-#ifdef DEBUG
-	cout << "GAME BOARD PRINT!" << endl;
-#endif
 	slot[pos]->print();
-
 	cout << endl;
 }
 

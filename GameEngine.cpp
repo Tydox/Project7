@@ -1,7 +1,5 @@
 #include "GameEngine.h"
-
 #include <string>
-
 
 GameEngine::GameEngine():playerIndex(0)
 {
@@ -13,19 +11,15 @@ void GameEngine::play()
 {
 	while (1)
 	{
-		if (playerIndex == players.size())
+		if (playerIndex == players.size())//restart players index if last player finishes his turn
 		{
 			playerIndex = 0;
 			continue;
 		}
-		//if remains 1 or no players - end game
-		if (players.size() <= 1)
+		
+		if (players.size() <= 1)//if 1 or no players remains - end game
 			break;
 		
-		#ifdef DEBUG
-			cout << players[playerIndex]->getName();
-		#endif
-
 		if(!(preTurn()))
 			continue;
 		if (!turn())
@@ -34,11 +28,10 @@ void GameEngine::play()
 			continue;
 		}
 		
-		
 		++playerIndex;
 	}
-	cout << endl << "The Winner is: " << players[0]->getName() << "!!!!!!!!!!!!" << endl;
-	playerForfeit();
+	cout << endl << "CONGRATULATIONS!!!!! \nTHE WINNER IS: " << players[0]->getName() << "!!!!!!!!!!!!" << endl << endl;
+	playerForfeit();//remove the last player from the game before deleting everything
 	cout << endl << "GAME Over!" << endl;
 }
 
@@ -112,9 +105,10 @@ int GameEngine::rollDice()
 
 void GameEngine::printPlayerPos(int& oldpose, int& dice, int& newpose)const
 {
+	cout << endl;
 	cout << left << setw(13) << setfill(' ') << "Dice Rolled";//DICE
-	cout << left << setw(18) << setfill(' ') << "Current Position";//old position
-	cout << left << setw(18) << setfill(' ') << "New Position";	//newposition
+	cout << left << setw(18) << setfill(' ') << "Current Slot";//old position
+	cout << left << setw(18) << setfill(' ') << "New Slot";	//newposition
 	cout << left << setw(5) << setfill(' ') << "Type" << endl;
 	cout << left << setw(13) << setfill(' ') << dice;	//data print
 	cout << left << setw(18) << setfill(' ') << oldpose;
@@ -123,7 +117,6 @@ void GameEngine::printPlayerPos(int& oldpose, int& dice, int& newpose)const
 
 void GameEngine::playerForfeit()
 {
-
 #ifdef DEBUG
 	cout << players[playerIndex]->getName() << " Lost!" << endl;
 		cout << "Players Vector size Before: " << players.size() << endl;
@@ -139,7 +132,7 @@ void GameEngine::playerForfeit()
 
 }
 
-void GameEngine::instaPrint(int& oba, int pay)
+void GameEngine::bankPayPrint(int oba, int pay)const
 {
 	cout << left << setw(75) << setfill('-') << "" << endl;
 	cout << left << setw(14) << setfill(' ') << "Payment";
@@ -160,11 +153,12 @@ bool GameEngine::preTurn()
 	while(true)//GET USER INPUT
 	try {
 		cout << left << setw(50) << setfill('_') << "" << endl;
-		cout << left << setw(16) << setfill(' ') << "Current Player:";
-		cout << left << setw(4)  << setfill(' ') << players[playerIndex]->getName() << endl;
+		cout << left << setw(20) << setfill(' ') << "Current Player";
+		cout << left << setw(20) << setfill(' ') << "Bank Account"<<endl;
+		cout << left << setw(20)  << setfill(' ') << players[playerIndex]->getName();
+		cout << left << setw(20)  << setfill(' ') << players[playerIndex]->getMoney()<<endl;
 		cout << left << setw(36) << setfill(' ') << "Do you want to Play[P]/Forfeit[F]:";
-
-			
+	
 		cin.ignore(cin.rdbuf()->in_avail());
 		getline(cin, tF);//get from user input if to play or quit
 		
@@ -184,7 +178,6 @@ bool GameEngine::preTurn()
 		return false;
 	}
 
-	
 	if (tF == "p" || tF == "P")//PLAYER CHOSE TO PLAY
 	{
 		return true;
@@ -203,7 +196,7 @@ bool GameEngine::turn()
 	int dice = rollDice();//generate dice num 1-6
 	int oldPos = players[playerIndex]->getPosition();//get old position for print val
 	
-	bool payedNewRound = false;//flag to know if to pay for completed the board loop slot
+	bool payedNewRound = false;//flag to know if to pay for completing the board loop slot
 	if (players[playerIndex]->setPosition(dice, boardSize)) //set new pos ||true = finished loop, give money
 	{
 #ifdef DEBUG
@@ -217,8 +210,7 @@ bool GameEngine::turn()
 	int newPos = players[playerIndex]->getPosition();//get players old pos
 	printPlayerPos(oldPos,dice,newPos); //print old pos
 
-	
-	board.printSlot(newPos);
+	board.printSlot(newPos);//print slots data
 	bool playerSurvived = true;//flag to know if player payed the payment successfully
 	int oldBankAcc = players[playerIndex]->getMoney();//save bank $ before payment change
 
@@ -230,39 +222,39 @@ bool GameEngine::turn()
 		int instaType = tmpInst->getType();
 		switch (instaType)
 		{
-		case 0:{//type 0 - start give 350
-				if(!payedNewRound)
+		case 0: //type 0 - start give 350
+			{
+				if (!payedNewRound)
 					players[playerIndex]->payment(START_MONEY);
 
-				instaPrint(oldBankAcc, START_MONEY);
+				bankPayPrint(oldBankAcc, START_MONEY);
 				break;
 			}
-			
-		case 1:{//type 1 - jail
+		case 1: //type 1 - jail
+			{
 				players[playerIndex]->setJail(true);
 				return true;
-				
-		}
-		case 2:{//type 2 - get ticket
-			int payment = deck.getCard();
-			playerSurvived = players[playerIndex]->payment(payment);
-			instaPrint(oldBankAcc, payment);
-						
-			if (!playerSurvived)
-				cout << players[playerIndex]->getName() << " couldn't pay the payment fee!" << endl;
+			}
+		case 2: //type 2 - get ticket
+			{
+				int payment = deck.getCard();
+				playerSurvived = players[playerIndex]->payment(payment);
+				bankPayPrint(oldBankAcc, payment);
 
-			break;
-		}	
+				if (!playerSurvived)
+					cout << players[playerIndex]->getName() << " couldn't pay the payment fee!" << endl;
+
+				break;
+			}
 		}
 	}
-	
 	
 	//ASSET SLOT
 	Asset* tmpAsset = dynamic_cast<Asset*>(board.getSlot(newPos));
 	if (tmpAsset)
 		if (tmpAsset->isNotOwned())//check if there is an owner to the asset
 		{
-			bool run = true;
+			bool run = true;//flag to know if player entered invalid input
 			string opt;
 			do
 			{
@@ -283,33 +275,28 @@ bool GameEngine::turn()
 				}
 			} while (run);
 
-			if (opt == "N" || opt == "n")
+			if (opt == "N" || opt == "n")//player does not want to buy the asset
 				return true;
 
-			if (opt == "Y" || opt == "y")
+			if (opt == "Y" || opt == "y")//player does want to buy the asset
 			{
-				int ap = tmpAsset->getPrice();//ap = asset price
-				int pc = players[playerIndex]->getMoney(); // pc = player bank cash $
-				if (pc >= ap)//check if player has enough cash to buy asset
+				int assetPrice = tmpAsset->getPrice();//asset price
+				int playerCash = players[playerIndex]->getMoney(); //player bank cash $
+				if (playerCash >= assetPrice)//check if player has enough cash to buy asset
 				{
 					tmpAsset->setPLink(players[playerIndex]);//connect Player and Asset to point at each other
-					players[playerIndex]->addAsset(tmpAsset,ap);//and remove money from bank acc
+					players[playerIndex]->addAsset(tmpAsset, assetPrice);//and remove money from bank acc
 					cout << "Purchase was successful!" << endl;
 				}
 				else
-				{
 					cout << "You do not have enough money to purchase this asset!" << endl << "Ending Turn!" << endl;
-				}
 			}
-
-
-
 		}
 		else //asset has an owner || either bank or player
 		{
-			int rentPrice = tmpAsset->getRent();
+			int rentPrice = tmpAsset->getRent();//save rent price
 			playerSurvived = players[playerIndex]->payment(((-1) * rentPrice));//player pays rent
-			instaPrint(oldBankAcc, (-1)* rentPrice);
+			bankPayPrint(oldBankAcc, (-1)* rentPrice);//print 
 			
 			if (!playerSurvived)
 				cout << players[playerIndex]->getName() << " couldn't pay the rent!" << endl;
@@ -320,8 +307,6 @@ bool GameEngine::turn()
 			}
 
 		}
-
-
 	return playerSurvived;
 }
 
