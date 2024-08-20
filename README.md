@@ -36,7 +36,6 @@ This project involves creating a console-based game where players navigate a boa
      ```
      P,City1,property1,150,20
      ```
-   - It is recommended to use the `getline` function to process strings from the file.
 
 ### Player Setup
    - After loading the board structure, the game prompts the user to enter the number of players and their names.
