@@ -17,6 +17,22 @@ This project involves creating a console-based game where players navigate a boa
 
 ## Game Rules
 
+### Gameplay
+   - The game is turn-based. At the start of each turn, the player is asked if they want to continue or quit. If a player quits, they are removed from the game.
+   - When a player quits, all of their assets are released to the public domain, and any mortgages on their properties are removed.
+
+### Player Setup
+   - After loading the board structure, the game prompts the user to enter the number of players and their names.
+   - Each player starts with a credit of $350 (this amount can be changed for debugging purposes).
+
+### Player Actions
+   - Each player starts at the "Start" slot.
+   - The game includes a method to handle debits and credits for a player:
+     - If the amount is positive, it is added to the player's balance.
+     - If the player has mortgaged properties and the new balance is sufficient, the game will attempt to redeem the properties.
+     - If the amount is negative, the player's balance is debited accordingly. If the balance is insufficient, the player's properties will be mortgaged in order of acquisition until the required amount is covered.
+
+
 ### Game Start
    - The game begins by reading the board structure from a file. Each row in the file represents a slot on the board.
    - The structure of a line for an instruction slot (I) in the file is:
@@ -37,20 +53,7 @@ This project involves creating a console-based game where players navigate a boa
      P,City1,property1,150,20
      ```
 
-### Player Setup
-   - After loading the board structure, the game prompts the user to enter the number of players and their names.
-   - Each player starts with a credit of $350 (this amount can be changed for debugging purposes).
 
-### Gameplay
-   - The game is turn-based. At the start of each turn, the player is asked if they want to continue or quit. If a player quits, they are removed from the game.
-   - When a player quits, all of their assets are released to the public domain, and any mortgages on their properties are removed.
-
-### Player Actions
-   - Each player starts at the "Start" slot.
-   - The game includes a method to handle debits and credits for a player:
-     - If the amount is positive, it is added to the player's balance.
-     - If the player has mortgaged properties and the new balance is sufficient, the game will attempt to redeem the properties.
-     - If the amount is negative, the player's balance is debited accordingly. If the balance is insufficient, the player's properties will be mortgaged in order of acquisition until the required amount is covered.
 
 ### Game Components
 
