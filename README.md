@@ -17,8 +17,6 @@ This project involves creating a console-based game where players navigate a boa
 
 ## Game Rules
 
----
-
 ### Game Start
    - The game begins by reading the board structure from a file. Each row in the file represents a slot on the board.
    - The structure of a line for an instruction slot (I) in the file is:
