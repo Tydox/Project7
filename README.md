@@ -88,7 +88,7 @@ This project involves creating a console-based game where players navigate a boa
 ![](https://github.com/Tydox/Project7/blob/master/Images/algo-flow.png)
 ### Class Relationships
 ![](https://github.com/Tydox/Project7/blob/master/Images/class-relationships.png)
-
+### Simplified workflow
 ![](https://github.com/Tydox/Project7/blob/master/Images/simple-flow1.png)
 ![](https://github.com/Tydox/Project7/blob/master/Images/simple-flow2.png)
 ![](https://github.com/Tydox/Project7/blob/master/Images/simple-flow3.png)
