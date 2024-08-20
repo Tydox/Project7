@@ -84,3 +84,13 @@ This project involves creating a console-based game where players navigate a boa
    - If there is a circular reference (where an asset points to a player and the player has an array of assets), ensure that class declarations are added to the header files to prevent compilation errors.
 
 ---
+## Algorithem and flowchats
+
+![](https://github.com/Tydox/Project7/blob/master/Images/algo-flow.png)
+![](https://github.com/Tydox/Project7/blob/master/Images/class-relationships.png)
+![](https://github.com/Tydox/Project7/blob/master/Images/simple-flow1.png)
+![](https://github.com/Tydox/Project7/blob/master/Images/simple-flow2.png)
+![](https://github.com/Tydox/Project7/blob/master/Images/simple-flow3.png)
+
+
+---
