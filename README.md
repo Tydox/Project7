@@ -17,7 +17,7 @@ This project involves creating a console-based game where players navigate a boa
 
 ## Screenshots
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![](https://github.com/Tydox/Project7/blob/master/Images/algo-flow.png)
 
 
 ## Game Rules
