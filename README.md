@@ -1,4 +1,3 @@
-
 ---
 title: Monopoly using OOP in CPP
 author: Tydox
