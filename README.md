@@ -54,23 +54,18 @@ This project involves creating a console-based game where players navigate a boa
 
 ### Game Components
 
-1. **Deck:**
-   - The `Deck` class manages the collection of cards that players may draw during the game. Each card represents an action or event that impacts the player's status or position on the board.
+   - `Deck` class manages the collection of cards that players may draw during the game. Each card represents an action or event that impacts the player's status or position on the board.
 
-2. **Player:**
-   - The `Player` class represents each participant in the game. It manages the player's current position, balance, properties owned, and other statuses. Players interact with the game board through this class.
+   - `Player` class represents each participant in the game. It manages the player's current position, balance, properties owned, and other statuses. Players interact with the game board through this class.
 
-3. **Board:**
-   - The `Board` class manages the overall structure of the game, including the layout of slots, property ownership, and player positions. It reads from the input file to set up the board and governs the interaction between players and the slots they land on.
+   - `Board` class manages the overall structure of the game, including the layout of slots, property ownership, and player positions. It reads from the input file to set up the board and governs the interaction between players and the slots they land on.
 
-4. **Asset:**
-   - The `Asset` class manages individual properties on the board. It tracks ownership, value, and rental income. This class also handles the mortgaging and redemption of properties when players need to cover debts or sell assets.
+   - `Asset` class manages individual properties on the board. It tracks ownership, value, and rental income. This class also handles the mortgaging and redemption of properties when players need to cover debts or sell assets.
 
-5. **GameEngine:**
-   - The `GameEngine` class orchestrates the overall flow of the game, controlling the sequence of turns, player interactions, and game logic. It acts as the main controller, ensuring that the rules are followed and that the game progresses smoothly.
+   - `GameEngine` class orchestrates the overall flow of the game, controlling the sequence of turns, player interactions, and game logic. It acts as the main controller, ensuring that the rules are followed and that the game progresses smoothly.
 
-6. **Instruction Slot:**
-   - This type of slot provides specific instructions to the player, such as receiving money, moving to another slot, or drawing a card. The `Instruction Slot` class handles the execution of these instructions when a player lands on the slot.
+
+   - `Instruction Slot` class, this type of slot provides specific instructions to the player, such as receiving money, moving to another slot, or drawing a card. The `Instruction Slot` class handles the execution of these instructions when a player lands on the slot.
 
 ### Other Rules
    - If there is a circular reference (where an asset points to a player and the player has an array of assets), ensure that class declarations are added to the header files to prevent compilation errors.
