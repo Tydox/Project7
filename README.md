@@ -15,11 +15,6 @@ In my C++ Object Oriented Programming course, our final project was to create a 
 
 This project involves creating a console-based game where players navigate a board with various slots that have different effects. The game structure is defined by an input file that specifies the types of slots on the board, and players compete by purchasing properties, managing resources, and making strategic decisions.
 
-## Screenshots
-
-![](https://github.com/Tydox/Project7/blob/master/Images/algo-flow.png)
-
-
 ## Game Rules
 
 ---
@@ -82,6 +77,13 @@ This project involves creating a console-based game where players navigate a boa
 
 ### Other Rules
    - If there is a circular reference (where an asset points to a player and the player has an array of assets), ensure that class declarations are added to the header files to prevent compilation errors.
+
+---
+
+
+## Screenshots
+
+![]()
 
 ---
 ## Algorithem and flowchats
